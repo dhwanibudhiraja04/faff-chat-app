@@ -28,4 +28,4 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error(err));
 
 const PORT = process.env.PORT || 5050;
-http.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+http.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
