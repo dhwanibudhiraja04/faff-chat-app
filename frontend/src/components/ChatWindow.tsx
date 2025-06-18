@@ -3,13 +3,9 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { io } from 'socket.io-client'
-import type { ComponentType } from 'react'
 import dynamic from 'next/dynamic'
 
-// Dynamic import with correct type casting for emoji-mart v3 Picker
-const Picker = dynamic(() => import('@emoji-mart/react'), {
-  ssr: false,
-}) as ComponentType<any>
+const Picker = dynamic(() => import('@emoji-mart/react'), { ssr: false }) as any
 
 type User = {
   _id: string
@@ -25,7 +21,10 @@ type Message = {
   createdAt?: string
 }
 
-const socket = io('http://localhost:4000')
+const socket = io('http://localhost:4000', {
+  withCredentials: true,
+  autoConnect: true,
+})
 
 export default function ChatWindow({ selectedUser }: { selectedUser: User | null }) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -35,14 +34,22 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   const [hasMore, setHasMore] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [isConnected, setIsConnected] = useState(socket.connected)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const typingTimeout = useRef<any>(null)
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem('userId')
-    setCurrentUserId(storedUserId)
+    setCurrentUserId(localStorage.getItem('userId') || null)
+
+    socket.on('connect', () => setIsConnected(true))
+    socket.on('disconnect', () => setIsConnected(false))
+
+    return () => {
+      socket.off('connect')
+      socket.off('disconnect')
+    }
   }, [])
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     socket.on('message', (msg: Message) => {
       if (msg.senderId === selectedUser._id || msg.receiverId === selectedUser._id) {
-        setMessages((prev) => [...prev, msg])
+        setMessages(prev => [...prev, msg])
       }
     })
 
@@ -94,11 +101,8 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
       )
       const data = await res.json()
 
-      if (data.length === 0) {
-        setHasMore(false)
-      } else {
-        setMessages((prev) => [...data.reverse(), ...prev])
-      }
+      if (data.length === 0) setHasMore(false)
+      else setMessages(prev => [...data.reverse(), ...prev])
     } catch (err) {
       console.error('Failed to load older messages', err)
     } finally {
@@ -123,7 +127,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
     }
 
     socket.emit('message', msg)
-    setMessages((prev) => [...prev, msg])
+    setMessages(prev => [...prev, msg])
     setNewMessage('')
     setShowEmojiPicker(false)
   }
@@ -144,6 +148,12 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
   return (
     <div className="flex-1 h-full flex flex-col relative">
+      {!isConnected && (
+        <div className="bg-red-500 text-white text-sm text-center py-1">
+          Reconnecting...
+        </div>
+      )}
+
       <div className="border-b p-4 font-semibold">{selectedUser.name}</div>
 
       <div
@@ -187,25 +197,24 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
         </div>
       )}
 
-      {/* ✅ Emoji Picker */}
       {showEmojiPicker && (
         <div className="absolute bottom-20 left-4 z-50">
-            <Picker
+          <Picker
             onEmojiSelect={(emoji: any) =>
-                setNewMessage((prev) => prev + (emoji.native || emoji.shortcodes))
+              setNewMessage(prev => prev + emoji?.native || '')
             }
             theme="light"
             emojiSize={20}
             maxFrequentRows={0}
             previewPosition="none"
-            />
+          />
         </div>
-        )}
+      )}
 
       <div className="border-t p-4 flex gap-2 relative">
         <button
           className="text-2xl px-2"
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
+          onClick={() => setShowEmojiPicker(prev => !prev)}
         >
           😊
         </button>
