@@ -21,15 +21,6 @@ type Message = {
   createdAt?: string
 }
 
-// ✅ Proper socket declaration with auth and reconnect options
-const socket: Socket = io('https://backend-shy-star-6918.fly.dev', {
-  auth: {
-    token: localStorage.getItem('token') || '',
-  },
-  withCredentials: true,
-  autoConnect: true,
-})
-
 export default function ChatWindow({ selectedUser }: { selectedUser: User | null }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -38,27 +29,36 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   const [hasMore, setHasMore] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const [isConnected, setIsConnected] = useState(socket.connected)
+  const [isConnected, setIsConnected] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const typingTimeout = useRef<any>(null)
+  const socketRef = useRef<Socket | null>(null)
 
   useEffect(() => {
+    const token = localStorage.getItem('token') || ''
     const userId = localStorage.getItem('userId')
     setCurrentUserId(userId)
 
-    socket.on('connect', () => setIsConnected(true))
-    socket.on('disconnect', () => setIsConnected(false))
+    const s = io('https://backend-shy-star-6918.fly.dev', {
+      auth: { token },
+      withCredentials: true,
+      autoConnect: true,
+    })
+
+    socketRef.current = s
+
+    s.on('connect', () => setIsConnected(true))
+    s.on('disconnect', () => setIsConnected(false))
 
     return () => {
-      socket.off('connect')
-      socket.off('disconnect')
+      s.disconnect()
     }
   }, [])
 
   useEffect(() => {
-    if (!selectedUser) return
+    if (!selectedUser || !socketRef.current) return
 
     const fetchMessages = async () => {
       const token = localStorage.getItem('token')
@@ -71,24 +71,24 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     fetchMessages()
 
-    socket.on('message', (msg: Message) => {
+    socketRef.current.on('message', (msg: Message) => {
       if (msg.senderId === selectedUser._id || msg.receiverId === selectedUser._id) {
         setMessages(prev => [...prev, msg])
       }
     })
 
-    socket.on('typing', (data) => {
+    socketRef.current.on('typing', (data) => {
       if (data.senderId === selectedUser._id) setIsTyping(true)
     })
 
-    socket.on('stopTyping', (data) => {
+    socketRef.current.on('stopTyping', (data) => {
       if (data.senderId === selectedUser._id) setIsTyping(false)
     })
 
     return () => {
-      socket.off('message')
-      socket.off('typing')
-      socket.off('stopTyping')
+      socketRef.current?.off('message')
+      socketRef.current?.off('typing')
+      socketRef.current?.off('stopTyping')
     }
   }, [selectedUser])
 
@@ -123,7 +123,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   }
 
   const sendMessage = () => {
-    if (!newMessage.trim() || !currentUserId || !selectedUser) return
+    if (!newMessage.trim() || !currentUserId || !selectedUser || !socketRef.current) return
 
     const msg: Message = {
       senderId: currentUserId,
@@ -131,7 +131,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
       message: newMessage.trim(),
     }
 
-    socket.emit('message', msg)
+    socketRef.current.emit('message', msg)
     setMessages(prev => [...prev, msg])
     setNewMessage('')
     setShowEmojiPicker(false)
@@ -224,8 +224,8 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
           onChange={(e) => {
             setNewMessage(e.target.value)
 
-            if (currentUserId && selectedUser) {
-              socket.emit('typing', {
+            if (currentUserId && selectedUser && socketRef.current) {
+              socketRef.current.emit('typing', {
                 senderId: currentUserId,
                 receiverId: selectedUser._id,
               })
@@ -233,7 +233,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
               if (typingTimeout.current) clearTimeout(typingTimeout.current)
 
               typingTimeout.current = setTimeout(() => {
-                socket.emit('stopTyping', {
+                socketRef.current?.emit('stopTyping', {
                   senderId: currentUserId,
                   receiverId: selectedUser._id,
                 })
