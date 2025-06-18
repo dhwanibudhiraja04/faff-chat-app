@@ -22,7 +22,8 @@ export default function Sidebar({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('http://localhost:4000/users')
+       const res = await fetch('https://backend-shy-star-6918.fly.dev/users')
+
         const data = await res.json()
         setUsers(data)
       } catch (err) {

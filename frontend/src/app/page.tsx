@@ -1,103 +1,254 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-white text-gray-800 px-6 py-12 flex flex-col items-center justify-center">
+      <section className="text-center max-w-3xl">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          Realtime Chat & Memory Platform
+        </h1>
+        <p className="text-xl md:text-2xl text-gray-600 mb-2">
+          Built for the FAFF Engineering Assignment
+        </p>
+        <p className="text-md text-gray-500 mb-8">By Dhwani Budhiraja</p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="flex flex-wrap gap-4 justify-center mb-12">
+          <Link href="/signup">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-200">
+              Get Started
+            </button>
+          </Link>
+          <Link href="/login">
+            <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg transition duration-200">
+              Login
+            </button>
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+
+        <div className="mt-6">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/hero-chat-illustration.avif"
+            alt="Chat App Preview Illustration"
+            width={600}
+            height={400}
+            className="rounded-xl shadow-lg mx-auto"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <p className="text-gray-400 mt-2 text-sm">
+            Illustration: A visual overview of the real-time chat experience
+          </p>
+        </div>
+      </section>
+
+      <section className="w-full max-w-5xl px-4 py-16 mx-auto text-center">
+  <h2 className="text-3xl md:text-4xl font-bold mb-6">About the Assignment</h2>
+  <p className="text-gray-600 text-lg mb-12">
+    This project was built as part of the FAFF Engineering Assignment and includes three integrated parts focused on real-time communication, system analysis, and NLP-driven memory extraction.
+  </p>
+
+  <div className="grid gap-6 md:grid-cols-3">
+    {/* Part 1: Realtime Chat */}
+    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
+      <h3 className="text-xl font-semibold mb-2">💬 Realtime Chat App</h3>
+      <p className="text-sm text-gray-600">
+        A full-stack chat platform with authentication, real-time messaging, and message history support.
+      </p>
     </div>
+
+    {/* Part 2: Bottleneck Analysis */}
+    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
+      <h3 className="text-xl font-semibold mb-2">📉 Bottleneck Analysis</h3>
+      <p className="text-sm text-gray-600">
+        Estimation of system scalability limits, monitoring strategies, and failure detection mechanisms.
+      </p>
+    </div>
+
+    {/* Part 3: Memory Extraction */}
+    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
+      <h3 className="text-xl font-semibold mb-2">🧠 Memory Extraction</h3>
+      <p className="text-sm text-gray-600">
+        Extracted long-term user facts from chat logs using NLP, structured into queryable memory snippets.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className="w-full max-w-5xl px-4 py-16 mx-auto">
+  <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+    Part 1: Realtime Chat App
+  </h2>
+  <p className="text-gray-600 text-center mb-10 text-lg">
+    A scalable chat system with live messaging, user auth, and persistent message storage.
+  </p>
+
+  <div className="grid md:grid-cols-2 gap-8 items-center">
+    {/* Left: Info and Features */}
+    <div>
+      <ul className="list-disc text-gray-700 pl-6 space-y-3 mb-6">
+        <li>User Signup/Login with email</li>
+        <li>Real-time communication via Socket.io</li>
+        <li>Persistent storage using backend APIs</li>
+        <li>REST API Endpoints:
+          <ul className="list-disc pl-6 text-sm text-gray-500 mt-1">
+            <li>POST /users</li>
+            <li>POST /messages</li>
+            <li>GET /messages?userId=...</li>
+          </ul>
+        </li>
+      </ul>
+
+      <div className="flex gap-4 mt-4">
+        <Link href="/login">
+          <button className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md transition">
+            Try the Chat
+          </button>
+        </Link>
+      </div>
+    </div>
+
+    {/* Right: Chat UI Screenshot */}
+    <div className="text-center">
+      <Image
+        src="/chat-ui-preview.png"
+        alt="Chat UI Screenshot"
+        width={500}
+        height={350}
+        className="rounded-lg shadow-lg"
+      />
+      <p className="text-gray-400 text-sm mt-2">
+        Screenshot: Live chat UI with message input and real-time updates
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className="w-full max-w-5xl px-4 py-16 mx-auto">
+  <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+    Part 2: Bottleneck & Failure Analysis
+  </h2>
+  <p className="text-gray-600 text-center text-lg mb-10">
+    Evaluating the scalability limits and identifying failure points of the chat system.
+  </p>
+
+  <div className="grid md:grid-cols-2 gap-8 items-start">
+    {/* Left: Key Points */}
+    <div>
+      <ul className="list-disc text-gray-700 pl-6 space-y-3">
+        <li>
+          <strong>Breaking Point:</strong> ~2,000 concurrent users on GCP e2-standard-2
+        </li>
+        <li>
+          <strong>Limiting Factor:</strong> CPU-bound message broadcast handler
+        </li>
+        <li>
+          <strong>Logged Metrics:</strong> Message throughput, active socket connections
+        </li>
+        <li>
+          <strong>Detection:</strong> Used logging to monitor event loop lag and memory usage
+        </li>
+        <li>
+          <strong>Mitigation Plan:</strong> Introduce horizontal scaling + Redis pub/sub
+        </li>
+      </ul>
+
+      <div className="mt-6">
+        <Link href="/bottleneck-analysis.pdf">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition">
+            View Full Report
+          </button>
+        </Link>
+      </div>
+    </div>
+
+    {/* Right: System Diagram */}
+    <div className="text-center">
+      <Image
+        src="/bottleneck-diagram.png"
+        alt="System Bottleneck Diagram"
+        width={500}
+        height={350}
+        className="rounded-lg shadow-lg"
+      />
+      <p className="text-gray-400 text-sm mt-2">
+        Diagram: Architecture and bottleneck hotspots
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className="w-full max-w-5xl px-4 py-16 mx-auto">
+  <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+    Part 3: Memory Extraction
+  </h2>
+  <p className="text-gray-600 text-center text-lg mb-10">
+    Automatically extract structured memories from chat logs using NLP – to capture user preferences, topics, and personal facts.
+  </p>
+
+  <div className="grid md:grid-cols-2 gap-8 items-start">
+    {/* Left: Description */}
+    <div>
+      <ul className="list-disc text-gray-700 pl-6 space-y-3">
+        <li>Parse chat transcripts to identify facts (e.g., “I love jazz music”)</li>
+        <li>Deduplicate and timestamp extracted memory items</li>
+        <li>Store memories with references to original messages</li>
+        <li>Expose query API for retrieving user-specific memories</li>
+      </ul>
+
+      <div className="mt-6">
+        <Link href="/memory-query-demo">
+          <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">
+            Try Memory Query Demo
+          </button>
+        </Link>
+      </div>
+    </div>
+
+    {/* Right: Preview Image & Example */}
+    <div className="text-center">
+      <Image
+        src="/memory-output-preview.jpg"
+        alt="Memory Extraction Output Preview"
+        width={500}
+        height={350}
+        className="rounded-lg shadow-lg"
+      />
+      <p className="text-gray-400 text-sm mt-2">
+        Screenshot: Structured memory output (JSON or table)
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className="w-full max-w-4xl px-4 py-20 mx-auto text-center bg-blue-50 rounded-xl mt-10">
+  <h2 className="text-3xl md:text-4xl font-bold mb-4">Get Started</h2>
+  <p className="text-gray-700 text-lg mb-8">
+    All three parts of the FAFF Engineering Assignment are completed and live! Jump in and explore the chat platform or try out the memory extraction features.
+  </p>
+
+  <div className="flex flex-wrap justify-center gap-4 mb-6">
+    <Link href="/users">
+      <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">
+        Sign Up
+      </button>
+    </Link>
+    <Link href="/users">
+      <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-md">
+        Login
+      </button>
+    </Link>
+  </div>
+
+  <div className="text-sm text-gray-500">
+    <p>Built by <strong>Dhwani Budhiraja</strong> for the <strong>FAFF Engineering Assignment</strong></p>
+    <p className="mt-2">
+      🔗 <a href="https://github.com/dhwanibudhiraja04/faff-chat-app" className="underline hover:text-blue-700">GitHub Repo</a> |
+      🌐 <a href="https://faff-chat-app.vercel.app/">Live Demo</a> |
+      ✉️ <a href="mailto:dhwanibudhiraja2004@gmail.com" className="underline hover:text-blue-700">dhwanibudhiraja2004@gmail.com</a>
+    </p>
+  </div>
+</section>
+
+
+    </main>
   );
 }

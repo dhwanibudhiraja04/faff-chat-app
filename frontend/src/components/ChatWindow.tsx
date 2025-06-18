@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { io } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 import dynamic from 'next/dynamic'
 
 const Picker = dynamic(() => import('@emoji-mart/react'), { ssr: false }) as any
@@ -21,7 +21,11 @@ type Message = {
   createdAt?: string
 }
 
-const socket = io('http://localhost:4000', {
+// ✅ Proper socket declaration with auth and reconnect options
+const socket: Socket = io('https://backend-shy-star-6918.fly.dev', {
+  auth: {
+    token: localStorage.getItem('token') || '',
+  },
   withCredentials: true,
   autoConnect: true,
 })
@@ -41,7 +45,8 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   const typingTimeout = useRef<any>(null)
 
   useEffect(() => {
-    setCurrentUserId(localStorage.getItem('userId') || null)
+    const userId = localStorage.getItem('userId')
+    setCurrentUserId(userId)
 
     socket.on('connect', () => setIsConnected(true))
     socket.on('disconnect', () => setIsConnected(false))
@@ -57,7 +62,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     const fetchMessages = async () => {
       const token = localStorage.getItem('token')
-      const res = await fetch(`http://localhost:4000/messages?userId=${selectedUser._id}`, {
+      const res = await fetch(`https://backend-shy-star-6918.fly.dev/messages?userId=${selectedUser._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
@@ -96,7 +101,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     try {
       const res = await fetch(
-        `http://localhost:4000/messages?userId=${selectedUser._id}&before=${oldest}`,
+        `https://backend-shy-star-6918.fly.dev/messages?userId=${selectedUser._id}&before=${oldest}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await res.json()
@@ -173,15 +178,9 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
           return (
             <div
               key={idx}
-              className={`flex flex-col max-w-xs ${
-                isSent ? 'ml-auto items-end' : 'items-start'
-              }`}
+              className={`flex flex-col max-w-xs ${isSent ? 'ml-auto items-end' : 'items-start'}`}
             >
-              <div
-                className={`p-2 rounded-lg text-sm ${
-                  isSent ? 'bg-green-200' : 'bg-blue-100'
-                }`}
-              >
+              <div className={`p-2 rounded-lg text-sm ${isSent ? 'bg-green-200' : 'bg-blue-100'}`}>
                 {msg.message}
               </div>
               <div className="text-xs text-gray-400 mt-1">{time}</div>
@@ -201,7 +200,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
         <div className="absolute bottom-20 left-4 z-50">
           <Picker
             onEmojiSelect={(emoji: any) =>
-              setNewMessage(prev => prev + emoji?.native || '')
+              setNewMessage(prev => prev + (emoji.native || emoji.shortcodes || ''))
             }
             theme="light"
             emojiSize={20}
