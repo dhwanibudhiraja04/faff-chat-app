@@ -125,14 +125,20 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   const sendMessage = () => {
     if (!newMessage.trim() || !currentUserId || !selectedUser || !socketRef.current) return
 
-    const msg: Message = {
-      senderId: currentUserId,
-      receiverId: selectedUser._id,
+    socketRef.current.emit('message', {
+      to: selectedUser._id,
       message: newMessage.trim(),
-    }
+    })
 
-    socketRef.current.emit('message', msg)
-    setMessages(prev => [...prev, msg])
+    setMessages(prev => [
+      ...prev,
+      {
+        senderId: currentUserId,
+        receiverId: selectedUser._id,
+        message: newMessage.trim(),
+        createdAt: new Date().toISOString(),
+      }
+    ])
     setNewMessage('')
     setShowEmojiPicker(false)
   }

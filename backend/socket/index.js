@@ -15,8 +15,8 @@ module.exports = (io) => {
 
       console.log(`✅ User connected: ${userId}`);
 
-      socket.on("send_message", ({ to, message }) => {
-        io.to(to).emit("receive_message", { from: userId, message });
+      socket.on("message", ({ to, message }) => {
+        io.to(to).emit("message", { from: userId, message });
       });
 
       socket.on("disconnect", () => {
