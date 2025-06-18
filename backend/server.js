@@ -23,8 +23,8 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use(require('./routes/userRoutes'));
-app.use(require('./routes/messageRoutes'));
+app.use('/users', require('./routes/userRoutes'));
+app.use('/messages', require('./routes/messageRoutes'));
 
 // Mongo Connection
 mongoose.connect(process.env.MONGO_URI)

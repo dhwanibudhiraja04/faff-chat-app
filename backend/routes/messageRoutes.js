@@ -3,6 +3,6 @@ const router = express.Router();
 const { sendMessage, getMessages } = require('../controllers/messageController');
 const auth = require('../middleware/authMiddleware');
 
-router.post('/messages', auth, sendMessage);
-router.get('/messages', auth, getMessages);
+router.post('/', auth, sendMessage);
+router.get('/', auth, getMessages);
 module.exports = router;

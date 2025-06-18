@@ -20,3 +20,20 @@ primary_region = 'bom'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 5050
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+[env]
+  PORT="5050"
+  MONGO_URI="mongodb+srv://dhwanibudhiraja2004:8hNUDOZLnOsntM9G@cluster0.bnlhjjd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  JWT_SECRET="Z1v7aM8fQ@xP!3wL9sT$dE2rY^uB6kC"
