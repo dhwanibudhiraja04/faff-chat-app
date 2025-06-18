@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://faff-chat-app.vercel.app',
+  credentials: true
+}));
+app.options('*', cors());
 app.use(express.json());
 
 // Socket.IO
