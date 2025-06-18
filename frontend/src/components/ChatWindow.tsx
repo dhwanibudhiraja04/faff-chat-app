@@ -41,7 +41,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
     const userId = localStorage.getItem('userId')
     setCurrentUserId(userId)
 
-    const s = io('https://backend-shy-star-6918.fly.dev', {
+    const s = io('https://faff-chat-app.onrender.com', {
       auth: { token },
       withCredentials: true,
       autoConnect: true,
@@ -62,7 +62,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     const fetchMessages = async () => {
       const token = localStorage.getItem('token')
-      const res = await fetch(`https://backend-shy-star-6918.fly.dev/messages?userId=${selectedUser._id}`, {
+      const res = await fetch(`https://faff-chat-app.onrender.com/messages?userId=${selectedUser._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
@@ -101,7 +101,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     try {
       const res = await fetch(
-        `https://backend-shy-star-6918.fly.dev/messages?userId=${selectedUser._id}&before=${oldest}`,
+        `https://faff-chat-app.onrender.com/messages?userId=${selectedUser._id}&before=${oldest}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await res.json()

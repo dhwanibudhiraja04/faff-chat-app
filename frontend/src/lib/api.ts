@@ -1,5 +1,5 @@
 export async function loginUser(name: string, email: string) {
-  const res = await fetch('https://backend-shy-star-6918.fly.dev/users', {
+  const res = await fetch('https://faff-chat-app.onrender.com/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email }),
