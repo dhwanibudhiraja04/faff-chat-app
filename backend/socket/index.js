@@ -15,13 +15,18 @@ module.exports = (io) => {
 
       console.log(`✅ User connected: ${userId}`);
 
-      socket.on("message", ({ to, message }) => {
-        io.to(to).emit("message", {
+      socket.on("message", async ({ to, message }) => {
+        const msgObj = {
             senderId: userId,
             receiverId: to,
             message,
             createdAt: new Date().toISOString(),
-        });
+        };
+        
+        // Save message to database
+        await Message.create(msgObj);
+
+        io.to(to).emit("message", msgObj);
       });
 
       socket.on("disconnect", () => {
