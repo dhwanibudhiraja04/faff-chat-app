@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,7 +7,7 @@ export default function HomePage() {
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-white text-gray-800 px-6 py-12 flex flex-col items-center justify-center">
       <section className="text-center max-w-3xl">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          Realtime Chat & Memory Platform
+          Building my way into FAFF 
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 mb-2">
           Built for the FAFF Engineering Assignment
@@ -14,17 +15,17 @@ export default function HomePage() {
         <p className="text-md text-gray-500 mb-8">By Dhwani Budhiraja</p>
 
         <div className="flex flex-wrap gap-4 justify-center mb-12">
-          <Link href="/signup">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-200">
-              Get Started
-            </button>
-          </Link>
-          <Link href="/login">
-            <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg transition duration-200">
-              Login
-            </button>
-          </Link>
-        </div>
+  <button
+    onClick={() => {
+      document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+    }}
+    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-200"
+  >
+    Get Started
+  </button>
+
+</div>
+
 
         <div className="mt-6">
           <Image
@@ -40,7 +41,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="w-full max-w-5xl px-4 py-16 mx-auto text-center">
+      <section id="features" className="w-full max-w-5xl px-4 py-16 mx-auto text-center">
   <h2 className="text-3xl md:text-4xl font-bold mb-6">About the Assignment</h2>
   <p className="text-gray-600 text-lg mb-12">
     This project was built as part of the FAFF Engineering Assignment and includes three integrated parts focused on real-time communication, system analysis, and NLP-driven memory extraction.
@@ -48,28 +49,46 @@ export default function HomePage() {
 
   <div className="grid gap-6 md:grid-cols-3">
     {/* Part 1: Realtime Chat */}
-    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
-      <h3 className="text-xl font-semibold mb-2">💬 Realtime Chat App</h3>
-      <p className="text-sm text-gray-600">
-        A full-stack chat platform with authentication, real-time messaging, and message history support.
-      </p>
-    </div>
+<a
+  href="https://faff-chat-app.vercel.app/login"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200 cursor-pointer">
+    <h3 className="text-xl font-semibold mb-2">💬 Realtime Chat App</h3>
+    <p className="text-sm text-gray-600">
+      A full-stack chat platform with authentication, real-time messaging, and message history support.
+    </p>
+  </div>
+</a>
 
-    {/* Part 2: Bottleneck Analysis */}
-    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
-      <h3 className="text-xl font-semibold mb-2">📉 Bottleneck Analysis</h3>
-      <p className="text-sm text-gray-600">
-        Estimation of system scalability limits, monitoring strategies, and failure detection mechanisms.
-      </p>
-    </div>
+{/* Part 2: Bottleneck Analysis */}
+<a
+  href="https://phantom-caraway-a19.notion.site/TASK-2-Bottleneck-Failure-Analysis-216bd4a5e7d080fc8924e71aad3b07e1"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200 cursor-pointer">
+    <h3 className="text-xl font-semibold mb-2">📉 Bottleneck Analysis</h3>
+    <p className="text-sm text-gray-600">
+      Estimation of system scalability limits, monitoring strategies, and failure detection mechanisms.
+    </p>
+  </div>
+</a>
 
-    {/* Part 3: Memory Extraction */}
-    <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200">
-      <h3 className="text-xl font-semibold mb-2">🧠 Memory Extraction</h3>
-      <p className="text-sm text-gray-600">
-        Extracted long-term user facts from chat logs using NLP, structured into queryable memory snippets.
-      </p>
-    </div>
+{/* Part 3: Memory Extraction */}
+<a
+  href="https://colab.research.google.com/drive/13ETQ19Cohrjs2YKTLPMyay7wh77rtl-L?usp=sharing"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition duration-200 cursor-pointer">
+    <h3 className="text-xl font-semibold mb-2">🧠 Memory Extraction</h3>
+    <p className="text-sm text-gray-600">
+      Extracted long-term user facts from chat logs using NLP, structured into queryable memory snippets.
+    </p>
+  </div>
+</a>
   </div>
 </section>
 
@@ -152,7 +171,7 @@ export default function HomePage() {
       </ul>
 
       <div className="mt-6">
-        <Link href="/bottleneck-analysis.pdf">
+        <Link href="https://phantom-caraway-a19.notion.site/TASK-2-Bottleneck-Failure-Analysis-216bd4a5e7d080fc8924e71aad3b07e1">
           <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition">
             View Full Report
           </button>
@@ -195,9 +214,9 @@ export default function HomePage() {
       </ul>
 
       <div className="mt-6">
-        <Link href="/memory-query-demo">
+        <Link href="https://colab.research.google.com/drive/13ETQ19Cohrjs2YKTLPMyay7wh77rtl-L?usp=sharing">
           <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">
-            Try Memory Query Demo
+            Try Memory Query 
           </button>
         </Link>
       </div>
@@ -220,23 +239,11 @@ export default function HomePage() {
 </section>
 
 <section className="w-full max-w-4xl px-4 py-20 mx-auto text-center bg-blue-50 rounded-xl mt-10">
-  <h2 className="text-3xl md:text-4xl font-bold mb-4">Get Started</h2>
+  <h2 className="text-3xl md:text-4xl font-bold mb-4">Thank You for this  Opportunity.</h2>
   <p className="text-gray-700 text-lg mb-8">
     All three parts of the FAFF Engineering Assignment are completed and live! Jump in and explore the chat platform or try out the memory extraction features.
   </p>
 
-  <div className="flex flex-wrap justify-center gap-4 mb-6">
-    <Link href="/users">
-      <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">
-        Sign Up
-      </button>
-    </Link>
-    <Link href="/users">
-      <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-md">
-        Login
-      </button>
-    </Link>
-  </div>
 
   <div className="text-sm text-gray-500">
     <p>Built by <strong>Dhwani Budhiraja</strong> for the <strong>FAFF Engineering Assignment</strong></p>
