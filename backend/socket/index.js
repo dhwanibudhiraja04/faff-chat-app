@@ -16,7 +16,12 @@ module.exports = (io) => {
       console.log(`✅ User connected: ${userId}`);
 
       socket.on("message", ({ to, message }) => {
-        io.to(to).emit("message", { from: userId, message });
+        io.to(to).emit("message", {
+            senderId: userId,
+            receiverId: to,
+            message,
+            createdAt: new Date().toISOString(),
+        });
       });
 
       socket.on("disconnect", () => {
