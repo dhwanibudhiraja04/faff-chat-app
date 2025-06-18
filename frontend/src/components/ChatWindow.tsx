@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
 import { io } from 'socket.io-client'
+import type { ComponentType } from 'react'
+import dynamic from 'next/dynamic'
+
+// Dynamic import with correct type casting for emoji-mart v3 Picker
+const Picker = dynamic(() => import('@emoji-mart/react'), {
+  ssr: false,
+}) as ComponentType<any>
 
 type User = {
   _id: string
@@ -17,7 +25,7 @@ type Message = {
   createdAt?: string
 }
 
-const socket = io('http://localhost:4000') // Change if needed
+const socket = io('http://localhost:4000')
 
 export default function ChatWindow({ selectedUser }: { selectedUser: User | null }) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -26,10 +34,10 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   const [isTyping, setIsTyping] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageBoxRef = useRef<HTMLDivElement>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const typingTimeout = useRef<any>(null)
 
   useEffect(() => {
@@ -46,7 +54,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
-      setMessages(data.reverse()) // oldest first
+      setMessages(data.reverse())
     }
 
     fetchMessages()
@@ -117,6 +125,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
     socket.emit('message', msg)
     setMessages((prev) => [...prev, msg])
     setNewMessage('')
+    setShowEmojiPicker(false)
   }
 
   const scrollToBottom = () => {
@@ -134,7 +143,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
   }
 
   return (
-    <div className="flex-1 h-full flex flex-col">
+    <div className="flex-1 h-full flex flex-col relative">
       <div className="border-b p-4 font-semibold">{selectedUser.name}</div>
 
       <div
@@ -178,7 +187,28 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
         </div>
       )}
 
-      <div className="border-t p-4 flex gap-2">
+      {/* ✅ Emoji Picker */}
+      {showEmojiPicker && (
+        <div className="absolute bottom-20 left-4 z-50">
+            <Picker
+            onEmojiSelect={(emoji: any) =>
+                setNewMessage((prev) => prev + (emoji.native || emoji.shortcodes))
+            }
+            theme="light"
+            emojiSize={20}
+            maxFrequentRows={0}
+            previewPosition="none"
+            />
+        </div>
+        )}
+
+      <div className="border-t p-4 flex gap-2 relative">
+        <button
+          className="text-2xl px-2"
+          onClick={() => setShowEmojiPicker((prev) => !prev)}
+        >
+          😊
+        </button>
         <input
           className="flex-1 p-2 border rounded"
           placeholder="Type a message..."
