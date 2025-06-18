@@ -12,3 +12,8 @@ exports.registerUser = async (req, res) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
   res.json({ user, token });
 };
+
+exports.getAllUsers = async (req, res) => {
+  const users = await User.find({ _id: { $ne: req.userId } }); // Exclude self
+  res.json(users);
+};

@@ -22,8 +22,11 @@ export default function Sidebar({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-       const res = await fetch('https://faff-chat-app.onrender.com')
-
+       const res = await fetch('https://faff-chat-app.onrender.com/users', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
         const data = await res.json()
         setUsers(data)
       } catch (err) {
