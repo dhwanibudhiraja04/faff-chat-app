@@ -66,7 +66,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
-      setMessages(data.reverse())
+      setMessages((data.messages || []).reverse())
     }
 
     fetchMessages()
@@ -106,8 +106,8 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
       )
       const data = await res.json()
 
-      if (data.length === 0) setHasMore(false)
-      else setMessages(prev => [...data.reverse(), ...prev])
+      if (!data.messages || data.messages.length === 0) setHasMore(false)
+      else setMessages(prev => [...data.messages.reverse(), ...prev])
     } catch (err) {
       console.error('Failed to load older messages', err)
     } finally {
