@@ -36,7 +36,9 @@ export default function AuthForm() {
       }
 
       localStorage.setItem('token', res.token)
+      localStorage.setItem('userId', res.user._id)
       router.push('/chat')
+
     } catch (err: unknown) {
   if (err instanceof Error) {
     setError(err.message)
