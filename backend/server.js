@@ -5,7 +5,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-  origin: 'https://faff-chat-app.vercel.app',
+  origin: [
+    'https://faff-chat-app.vercel.app',
+    'https://faff-chat-app.onrender.com',
+    'https://faff-chat-app.vercel.app/chat',
+  ],
   credentials: true
 }));
 app.options('*', cors());
@@ -14,7 +18,13 @@ app.use(express.json());
 // Socket.IO
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
-  cors: { origin: "*" }
+  cors: {
+    origin: [
+      "https://faff-chat-app.vercel.app",
+      "https://faff-chat-app.onrender.com"
+    ],
+    credentials: true
+  }
 });
 require('./socket')(io);
 app.use((req, res, next) => {
