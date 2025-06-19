@@ -5,13 +5,19 @@ const cors = require('cors');
 const http = require('http');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://faff-chat-app.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server, {
-  cors: { origin: '*' }
+  cors: {
+    origin: "https://faff-chat-app.vercel.app",
+    credentials: true
+  }
 });
 require('./socket')(io);
 
