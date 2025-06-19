@@ -11,19 +11,19 @@ module.exports = (io) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.userId;
 
+      socket.userId = userId; // <-- Set userId on socket
       socket.join(userId);
 
       console.log(`✅ User connected: ${userId}`);
 
-      io.on('connection', (socket) => {
-        socket.on('message', (data) => {
-            // Save to DB, emit to receiver, etc.
-            io.to(data.to).emit('message', {
-            senderId: socket.userId,
-            receiverId: data.to,
-            message: data.message,
-            createdAt: new Date().toISOString(),
-            });
+      // Listen for messages from this socket
+      socket.on('message', (data) => {
+        // Save to DB, emit to receiver, etc.
+        io.to(data.to).emit('message', {
+          senderId: socket.userId,
+          receiverId: data.to,
+          message: data.message,
+          createdAt: new Date().toISOString(),
         });
       });
 
