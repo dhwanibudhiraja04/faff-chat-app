@@ -2,44 +2,25 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const http = require('http');
 
 const app = express();
-app.use(cors({
-  origin: [
-    'https://faff-chat-app.vercel.app',
-    'https://faff-chat-app.onrender.com',
-    'https://faff-chat-app.vercel.app/chat',
-  ],
-  credentials: true
-}));
-app.options('*', cors());
+app.use(cors());
 app.use(express.json());
 
-// Socket.IO
-const http = require('http').createServer(app);
-const io = require('socket.io')(http, {
-  cors: {
-    origin: [
-      "https://faff-chat-app.vercel.app",
-      "https://faff-chat-app.onrender.com"
-    ],
-    credentials: true
-  }
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server, {
+  cors: { origin: '*' }
 });
 require('./socket')(io);
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
 
-// Routes
-app.use('/users', require('./routes/userRoutes'));
-app.use('/messages', require('./routes/messageRoutes'));
+app.use('/users', require('./routes/users'));
+app.use('/messages', require('./routes/messages'));
 
-// Mongo Connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.error(err));
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB error:', err));
 
-const PORT = process.env.PORT || 5050;
-http.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
