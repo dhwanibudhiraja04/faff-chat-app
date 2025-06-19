@@ -62,9 +62,10 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     const fetchMessages = async () => {
       const token = localStorage.getItem('token')
-      const res = await fetch(`https://faff-chat-app.onrender.com/messages?userId=${selectedUser._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const res = await fetch(
+        `https://faff-chat-app.onrender.com/messages?user1=${currentUserId}&user2=${selectedUser._id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
       const data = await res.json()
       setMessages((data.messages || []).reverse())
     }
@@ -101,7 +102,7 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
 
     try {
       const res = await fetch(
-        `https://faff-chat-app.onrender.com/messages?userId=${selectedUser._id}&before=${oldest}`,
+        `https://faff-chat-app.onrender.com/messages?user1=${currentUserId}&user2=${selectedUser._id}&before=${oldest}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await res.json()
@@ -130,15 +131,15 @@ export default function ChatWindow({ selectedUser }: { selectedUser: User | null
       message: newMessage.trim(),
     })
 
-    setMessages(prev => [
-      ...prev,
-      {
-        senderId: currentUserId,
-        receiverId: selectedUser._id,
-        message: newMessage.trim(),
-        createdAt: new Date().toISOString(),
-      }
-    ])
+    // setMessages(prev => [
+    //   ...prev,
+    //   {
+    //     senderId: currentUserId,
+    //     receiverId: selectedUser._id,
+    //     message: newMessage.trim(),
+    //     createdAt: new Date().toISOString(),
+    //   }
+    // ])
     setNewMessage('')
     setShowEmojiPicker(false)
   }

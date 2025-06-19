@@ -9,9 +9,16 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const { userId, before } = req.query;
+  const { user1, user2, before } = req.query;
+  if (!user1 || !user2) {
+    return res.status(400).json({ error: 'user1 and user2 are required' });
+  }
+
   const query = {
-    $or: [{ senderId: userId }, { receiverId: userId }]
+    $or: [
+      { senderId: user1, receiverId: user2 },
+      { senderId: user2, receiverId: user1 }
+    ]
   };
   if (before) query.createdAt = { $lt: new Date(before) };
   const messages = await Message.find(query).sort({ createdAt: -1 }).limit(30);
