@@ -214,7 +214,7 @@ export default function HomePage() {
       </ul>
 
       <div className="mt-6">
-        <Link href="https://colab.research.google.com/drive/13ETQ19Cohrjs2YKTLPMyay7wh77rtl-L?usp=sharing">
+        <Link href="https://colab.research.google.com/drive/1cG1zpRPS4wBDHbjUaKGwhmO4QidXFKFF?usp=sharing">
           <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">
             Try Memory Query 
           </button>
